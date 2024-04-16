@@ -3,11 +3,14 @@ import $ from "jquery"
 class Search {
   // 1. describe and create/initiate our object
   constructor() {
+    this.resultsDiv = $("#search-overlay__results")
     this.openButton = $(".js-search-trigger")
     this.closeButton = $(".search-overlay__close")
     this.searchOverlay = $(".search-overlay")
     this.events()
     this.isOverlayOpen = false;
+    this.isSpinnerVisible = false;
+    this.previousValue;
     this.typingTimer
   }
 
@@ -21,16 +24,33 @@ class Search {
 
   // 3. methods (function, action...)
   typingLogic(){
-    clearTimeout(this.typingTimer);
-    this.typingTimer = setTimeout(function() {}, 2000);
+    if(this.searchField.val() != this.previousValue){
+      clearTimeout(this.typingTimer);
+
+      if(this.searchField.val()){
+        if(!this.isSpinnerVisible){
+          this.resultsDiv.html('<div class="spinner-loader"></div>')
+          this.isSpinnerVisible = true;
+        }
+        this.typingTimer = setTimeout(this.getResults.bind(this), 2000);
+      }
+      }else{
+        this.resultsDiv.html('');
+        this.isSpinnerVisible = false;
+      }
+
+      
+    
+    this.previousValue = this.searchField.val();
+  }
+
+  getResults(){
+    this.resultsDiv.html("Imagine real serach results here...")
+    this.isSpinnerVisible = false;
   }
 
   keyPressDispatcher(e){
-    if(e.keyCode == 83 && !this.isOverlayOpen){
-      this.openOverlay();
-    }
-
-    if(e.keyCode == 27 && this.isOverlayOpen){
+    if(e.keyCode == 27){
       this.closeOverlay();
     }
   }
