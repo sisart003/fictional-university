@@ -7,6 +7,10 @@ function university_files() {
     wp_enqueue_style('font-awesome', '//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
     wp_enqueue_style('university_main_styles', get_theme_file_uri('/build/style-index.css'));
     wp_enqueue_style('university_extra_styles', get_theme_file_uri('/build/index.css'));
+
+    wp_localize_script('main-university-js', 'universityDate', array(
+      'root_url' => get_site_url()
+    ));
 }
 
 
