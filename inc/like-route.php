@@ -48,8 +48,15 @@ function createLike($data){
     
 }
 
-function deleteLike(){
-    return 'Thanks for trying to delete a like.';
+function deleteLike($data){
+    $likeId = sanitize_text_field($data['like']);
+    if(get_current_user_id() == get_post_field('post_author', $likeId) && get_post_type($likeId) == 'like'){
+        wp_delete_post($likeId, true);
+        return 'Congrats';
+    }else{
+        die("You do not have permission");
+    }
 }
+
 
 add_action('rest_api_init', 'universityLikeRoutes');
